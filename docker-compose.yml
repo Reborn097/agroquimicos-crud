@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tienda
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql  # ✅ Volumen persistente
+
+  agroapp:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    environment:
+      DATASOURCE_URL: jdbc:mysql://mysql:3306/tienda
+      DATASOURCE_USERNAME: root
+      DATASOURCE_PASSWORD: root
+
+volumes:
+  mysql_data:  # ✅ Declaración del volumen
